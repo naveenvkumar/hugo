@@ -9,7 +9,7 @@ min_version = "0.120"
 
 [author]
   name = "Eran Kampf"
-  homepage = "https://developerzen.com"
+  homepage = "https://naveenvkumar.github.io/hugo/"
 
 # If porting an existing theme
 [original]
