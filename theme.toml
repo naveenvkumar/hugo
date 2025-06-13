@@ -2,13 +2,13 @@ name = "mediumish"
 license = "MIT"
 licenselink = "https://github.com/ekampf/mediumish-theme-gohugo/blob/master/LICENSE"
 description = "An elegant, mediumish theme for gohugo"
-homepage = "https://developerzen.com"
+homepage = "https://naveenvkumar.github.io/hugo/"
 tags = ["Blog", "Responsive", "Personal", "Minimal", "Clean", "Disqus", "Google Analytics"]
 features = []
 min_version = "0.120"
 
 [author]
-  name = "Eran Kampf"
+  name = "Naveen"
   homepage = "https://naveenvkumar.github.io/hugo/"
 
 # If porting an existing theme
