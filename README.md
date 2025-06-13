@@ -1,166 +1,295 @@
-# Mediumish Theme
+# github-style
 
-Originally forked from [lgaida's mediumish theme](https://github.com/lgaida/mediumish-gohugo-theme) this
-is a customized and improved theme used by [developerzen.com](https://developerzen.com).
+## Init hugo site
 
-This theme for gohugo is a customized port based on the [Mediumish Jekyll-Theme](//github.com/wowthemesnet/mediumish-theme-jekyll) by [WowThemesNet](//github.com/wowthemesnet). The original theme ships with a few more features than this ported version but i also added features which the original version did not include.
-
-![screenshot](https://raw.githubusercontent.com/ekampf/mediumish-gohugo-theme/master/images/screenshot.png)
-
-## Features
-
-+ Landingpage
-+ 404-Page
-+ Posts
-  + tags can be used
-  + shareable via socialmedia
-+ Custom pagination
-+ Prev/Next-Links
-+ Tag-Overview in Jumbotron
-+ Integrations:
-  + Disqus Comments
-  + Google Analytics
-  + Mailchimp
-
-## Installation
-
-Inside the folder of your Hugo site run:
-
-```shell
-cd themes
-git clone https://github.com/ekampf/mediumish-gohugo-theme
+```bash
+hugo new site mysite
+cd mysite
 ```
 
-## Preface
+## Install the theme
 
-I recommend placing image files for your site config within the `static` folder of your gohugo website. This allows them to be easily referenced from the config.toml or post.md files. You may structure the files and folders within `static` however you'd like, with one exception: There must be a file named `jumbotron.jpg` present under the path `static/images` as it is referenced in the .css.
-
-## Post Example
-
-To create a simple post use the hugo new command as usual.
-This theme makes use of page bundles / page resource (see <https://gohugo.io/content-management/page-bundles/>).
-Place any image next to your post's index.md file and make sure it contains the keyword "cover" inside its name.
-This image will also be used for twitter and opengraph cards.
-
-```shell
-hugo new blog/my-first-post/index.md
+```bash
+git submodule add git@github.com:MeiK2333/github-style.git themes/github-style
 ```
 
-Creating a new post will create something like this:
+## Update the theme
 
-```markdown
+If you just installed the theme, it is already in the latest version. If not, you can update using the below commands
+
+```bash
+cd themes/github-style
+git pull
+```
+
+Then, you need to rename the previous `posts` folder to `post`
+
+```bash
+cd <you-project-folder>
+mv content/posts content/post
+```
+
+## Setup readme
+
+```bash
+hugo new readme.md
+echo '`Hello World!`' > content/readme.md
+```
+
+## Pin post
+
+```
 ---
-title: "My first post"
-date: 2018-10-01T15:25:19+02:00
-publishdate: 2018-10-07T11:17:14+02:00
-tags: ["post", "interesting"]
-type: "post"
-comments: false
+pin: true
 ---
-# Lorem ipsum
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse tortor dui, fermentum non dapibus id, volutpat non odio.
 ```
 
-`publishdate`: is displayed at the top of the single-view\
-`lastmod`: is displayed as a hint on the single-view\
-`tags`: are used as usual, just add the tags you want to use. They are displayed in the jumbotron on the list-view, and on the bottom of each single-view\
-`comments`: true/false to turn on/off disqus-comments
+## Add new post
 
-## Static Content
+Hugo will create a post with `draft: true`, change it to false in order for it to show in the website.
 
-I added a customized layout for content of type "static", which means that posts in the folder "static" are displayed as standalone pages. I also disabled the list-layout for this folder.
-
-For example: to create an imprint, simply go with the following command and add your markdown-text.
-
-```shell
-hugo new static/imprint.md
+```
+hugo new post/title_of_the_post.md
 ```
 
-## Configuration
+## Limit display content
 
-You should at least specify the following default params in your config.toml
+### Approach 1: use summary
+
+```
+---
+title: "title"
+date: 2019-10-22T18:46:47+08:00
+draft: false
+summary: "The summary content"
+---
+```
+
+### Approach 2: use `<!--more-->`
+
+Use `<!--more-->` to separate content that will display in the posts page as abstraction and the rest of the content. This is different from summary, as summary will not appear in the post.
+```
+---
+title: "title"
+date: 2019-10-22T18:46:47+08:00
+draft: false
+---
+abstraction show in the post page
+<!--more-->
+other content
+```
+
+## Add last modified date
+
+add to `config.toml`
 
 ```toml
-baseURL = "http://yourdomain.com"
-languageCode = "en-us"
-title = "Mediumish"
-theme = "mediumish-gohugo-theme"
-summaryLength = 25
-copyright = "John Doe - All rights reserved"
-disqusShortname = "shortDisquis"
-googleAnalytics = "UA-1XXXXXXX1-X"
+lastmod = true
+
+[frontmatter]
+  lastmod = ["lastmod", ":fileModTime", ":default"]
 ```
 
-`title`: is displayed on the postlist and on each post as the title\
-`summaryLength`: feel free to play around with this\
-`copyright`: is displayed in the footer next to the copyright-logo\
-`disqusShortname`: provide your disqusShortname\
-`googleAnalytics`: provide your googleAnalytics-Code
+## Use [gitalk](https://github.com/gitalk/gitalk) to support comments
 
-### General Params
+add to `config.toml`
+
+```toml
+enableGitalk = true
+
+  [params.gitalk]
+    clientID = "Your client ID"
+    clientSecret = "Your client secret"
+    repo = "repo"
+    owner = "Your Github username"
+    admin = "Your Github username"
+    id = "location.pathname"
+    labels = "gitalk"
+    perPage = 30
+    pagerDirection = "last"
+    createIssueManually = true
+    distractionFreeMode = false
+```
+
+## Support LaTeX
+
+In you post add `math: true` to [front matter](https://gohugo.io/content-management/front-matter/)
+
+```
+---
+katex: math
+---
+```
+
+Then the [katex script](https://katex.org/docs/autorender.html) will auto render the string enclosed by delimiters.
+
+```
+# replace ... with latex formula
+display inline \\( ... \\)
+display block $$ ... $$
+```
+
+![latex example](https://raw.githubusercontent.com/MeiK2333/github-style/master/images/latex_example.png)
+
+## Support MathJax
+you can add MathJax:true to frontmatter
+
+```
+mathJax: true
+```
+
+## Custom CSS and JS
+
+Add your files in the static folder and list them in the custom_css and custom_js parameters
+
+For example, with static/css/custom.css and static/js/custom.js, add to `config.toml`
 
 ```toml
 [params]
-  logo = "/images/icon.png"
-  description = "the clean blog!"
-  mailchimp = "you can provide a mailchimp-link here, see below"
-  mailprotect = "you can provide a protector-name here, see below"
-  customCSS = ["css/tweaks.css", "css/customHeader.css"]
-  goatcounter = "your-goatcounter-code"
-  searchQueryParam = "q" # query parameter or False if no search
+  custom_css = ["css/custom.css"]
+  custom_js = ["js/custom.js"]
 ```
 
-`logo`: is displayed in titlebar and alertbar\
-`description`: is displayed under title\
-`mailchimp` and `mailprotect`: provide links to a mailchimp-list and a mailchimp-protector id, the following screenshot should clarify. if not specified the alertbar for mail-subscription doesn't show up.
-`customCSS`: you can add paths to your own css files here to tweak and customize the css.
-`goatcounter`: your goatcounter code.
-
-![mailchimp-example](https://raw.githubusercontent.com/ekampf/mediumish-gohugo-theme/master/images/mailchimp.png)
-
-### Author Params
+## config.toml example
 
 ```toml
-[params.author]
-  name = "John Doe"
-  thumbnail = "/images/author.jpg"
-  description = "Creator of this blog."
+baseURL = "https://meik2333.com/"
+languageCode = "zh-cn"
+title = "MeiK's blog"
+theme = "github-style"
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+
+[params]
+  author = "MeiK"
+  description = "In solitude, where we are least alone."
+  github = "MeiK2333"
+  facebook = "MeiK2333"
+  twitter = "MeiK2333"
+  linkedin = "MeiK2333"
+  instagram = "MeiK2333"
+  tumblr = "MeiK2333"
+  email = "meik2333@gmail.com"
+  url = "https://meik2333.com"
+  keywords = "blog, google analytics"
+  rss = true
+  lastmod = true
+  userStatusEmoji = "😀"
+  favicon = "/images/github.png"
+  avatar = "/images/avatar.png"
+  headerIcon = "/images/GitHub-Mark-Light-32px.png"
+  location = "China"
+  enableGitalk = true
+  custom_css = ["css/custom.css"]
+  custom_js = ["js/custom.js"]
+
+  [params.gitalk]
+    clientID = "Your client ID"
+    clientSecret = "Your client secret"
+    repo = "repo"
+    owner = "MeiK2333"
+    admin = "MeiK2333"
+    id = "location.pathname"
+    labels = "gitalk"
+    perPage = 15
+    pagerDirection = "last"
+    createIssueManually = true
+    distractionFreeMode = false
+
+  [[params.links]]
+    title = "Link"
+    href = "https://github.com/meik2333"
+  [[params.links]]
+    title = "Link2"
+    href = "https://meik2333.com"
+    icon = "https://meik2333.com/images/avatar.png"
+
+[frontmatter]
+  lastmod = ["lastmod", ":fileModTime", ":default"]
+
+[services]
+  [services.googleAnalytics]
+    ID = "UA-123456-789"
+
 ```
 
-![author-params](https://raw.githubusercontent.com/ekampf/mediumish-gohugo-theme/master/images/authorpost.png)
+## Support collapsible block
 
-### Landingpage Params
+You can create a collapsible block like this:
+
+```
+{{<details "summary title">}}
+
+block content
+
+{{</details>}}
+```
+
+And it will show like this:
+
+<details>
+  <summary>summary title</summary>
+  <p>block content</p>
+</details>
+
+## Support local search
+
+add to `config.toml`
 
 ```toml
-[params.index]
-  picture = "/images/author.jpg"
-  title = "John Doe"
-  subtitle = "I'm a unique placeholder. Working here and there!"
-  mdtext = '''Currently trying to get this blog running, still don't know what the blog will be about!\
-**This textblock is a demonstration of the mdtext-param.**\
-### This is a markdown heading'''
-  alertbar = true
+[params]
+  enableSearch = true
+
+[outputs]
+  home = ["html", "json"]
+
+[outputFormats.json]
+  mediaType = "application/json"
+  baseName = "index"
+  isPlainText = false
 ```
 
-You can currently provide your username from `github`, `linkedin`, `xing`, `twitter`, `medium`. They will be displayed as icons on the landingpage.
+We can do local search now, it is implemented by `fuse.js`.
 
-```toml
-[params.social]
-  github = "<username>"
-  linkedin = "<username>"
-  xing = "<username>"
-  medium = "<username>"
-  twitter = "<username>"
-  instagram = "<username>"
+## deploy.sh example
+
+There are various way to deploy to github, here is a link to official [document](https://gohugo.io/hosting-and-deployment/hosting-on-github/).
+
+Here is an sample. Note line 22 have `env HUGO_ENV="production"`, makes sure googleAnalysis is loaded during production, but is not loaded when we are testing it in localhost.
+
+```bash
+#!/bin/sh
+
+if [ "`git status -s`" ]
+then
+    echo "The working directory is dirty. Please commit any pending changes."
+    exit 1;
+fi
+
+echo "Deleting old publication"
+rm -rf public
+mkdir public
+git worktree prune
+rm -rf .git/worktrees/public/
+
+echo "Checking out gh-pages branch into public"
+git worktree add -B gh-pages public origin/gh-pages
+
+echo "Removing existing files"
+rm -rf public/*
+
+echo "Generating site"
+env HUGO_ENV="production" hugo -t github-style
+
+echo "Updating gh-pages branch"
+cd public && git add --all && git commit -m "Publishing to gh-pages (publish.sh)"
+
+#echo "Pushing to github"
+#git push --all
 ```
 
-![landingpage-params](https://raw.githubusercontent.com/ekampf/mediumish-gohugo-theme/master/images/landing.png)
+Then you can verify the site is working and use `git push --all` to push the change to github. If you don't want to check again every time, you can uncomment the `#git push --all` in the script.
 
-## Contributing
+## TODO
 
-Feel free to use the [issue tracker](//github.com/ekampf/mediumish-gohugo-theme/issues) if you want to contribute in any possible way.
-You can also create a [pull request](//github.com/ekampf/mediumish-gohugo-theme/pulls) if you have already implemented a new feature that you want to share.
-
-## License
-
-Like the original jekyll-theme this ported theme is released under the MIT License. Read more at the [License](//github.com/ekampf/mediumish-gohugo-theme/blob/master/LICENSE) itself.
+- 重写标题导航，那玩意儿引入的 JS 在控制台报错。
