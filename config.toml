@@ -1,12 +1,12 @@
-baseURL = "https://meik2333.com/"
-languageCode = "zh-cn"
-title = "MeiK's blog"
+baseURL = "https://naveenvkumar.github.io/hugo/"
+languageCode = "en-us"
+title = "Hugo's blog"
 theme = "github-style"
 pygmentsCodeFences = true
 pygmentsUseClasses = true
 
 [params]
-  author = "MeiK"
+  author = "Naven"
   description = "In solitude, where we are least alone."
   github = "MeiK2333"
   facebook = "MeiK2333"
@@ -15,7 +15,7 @@ pygmentsUseClasses = true
   instagram = "MeiK2333"
   tumblr = "MeiK2333"
   email = "meik2333@gmail.com"
-  url = "https://meik2333.com"
+  url = "https://naveen.in"
   keywords = "blog, google analytics"
   rss = true
   lastmod = true
